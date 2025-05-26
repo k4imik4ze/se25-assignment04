@@ -5,6 +5,7 @@ import de.unibayreuth.se.campuscoffee.api.dtos.PosDto;
 import de.unibayreuth.se.campuscoffee.domain.CampusType;
 import de.unibayreuth.se.campuscoffee.domain.PosType;
 import io.cucumber.java.*;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -96,6 +97,10 @@ public class CucumberPosSteps {
         assertThat(createdPosList).size().isEqualTo(posList.size());
     }
 
+    @And("I update the description of the POS {String} to {String}")
+    public void iUpdateTheDescriptionOfPOS(String description, String name) {
+    }
+
     // Then -----------------------------------------------------------------------
 
     @Then("the POS list should contain the same elements in the same order")
@@ -104,5 +109,9 @@ public class CucumberPosSteps {
         assertThat(retrievedPosList)
                 .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id", "createdAt", "updatedAt")
                 .containsExactlyInAnyOrderElementsOf(createdPosList);
+    }
+
+    @Then("the POS {string} should have the description {string}")
+    public void thePOSShouldHaveTheDescription(String arg0, String arg1) {
     }
 }
