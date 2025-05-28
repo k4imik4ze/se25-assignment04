@@ -68,7 +68,7 @@ public class CucumberPosSteps {
     private List<PosDto> createdPosList;
 
     @DataTableType
-    public PosDto toPosDto(Map<String,String> row) {
+    public PosDto toPosDto(Map<String, String> row) {
         return PosDto.builder()
                 .name(row.get("name"))
                 .description(row.get("description"))
@@ -89,6 +89,12 @@ public class CucumberPosSteps {
         assertThat(retrievedPosList).isEmpty();
     }
 
+    @Given("A POS list with the following elements")
+    public void aPOSListWithTheFollowingElements(List<PosDto> posList) {
+        createdPosList = createPos(posList);
+    }
+
+
     // When -----------------------------------------------------------------------
 
     @When("I insert POS with the following elements")
@@ -97,8 +103,15 @@ public class CucumberPosSteps {
         assertThat(createdPosList).size().isEqualTo(posList.size());
     }
 
-    @And("I update the description of the POS {String} to {String}")
-    public void iUpdateTheDescriptionOfPOS(String description, String name) {
+    @When("I update the description of the POS {string} to {string}")
+    public void iUpdateTheDescriptionOfThePOSTo(String name, String descr) {
+        PosDto oldPos = retrievePosByName(name);
+
+        PosDto newPos = oldPos.toBuilder()
+                .description(descr)
+                .build();
+
+        updatePos(List.of(newPos));
     }
 
     // Then -----------------------------------------------------------------------
@@ -112,6 +125,9 @@ public class CucumberPosSteps {
     }
 
     @Then("the POS {string} should have the description {string}")
-    public void thePOSShouldHaveTheDescription(String arg0, String arg1) {
+    public void thePOSShouldHaveTheDescription(String name, String descr) {
+        PosDto retrievedPos = retrievePosByName(name);
+        assertThat(retrievedPos.getDescription()).isEqualTo(descr);
     }
 }
+
